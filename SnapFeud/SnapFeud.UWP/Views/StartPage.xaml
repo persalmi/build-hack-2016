@@ -7,16 +7,36 @@
     xmlns:vm="using:SnapFeud.UWP.ViewModels"
     mc:Ignorable="d"
     DataContext="{Binding StartViewModel, Source={StaticResource ViewModelLocator}}"
-    d:DataContext="{d:DesignInstance Type=vm:StartViewModel, IsDesignTimeCreatable=True}"
-    Background="Green">
+    d:DataContext="{d:DesignInstance Type=vm:StartViewModel, IsDesignTimeCreatable=True}">
+    
+    <Page.Resources>
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="200"/>
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="Foreground" Value="LightGreen"/>
+        </Style>
+    </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="Green">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" FontSize="48" HorizontalAlignment="Center" Text="{Binding Title}"/>
-        <Button Grid.Row="2" Content="DEBUG" HorizontalAlignment="Center" Command="{Binding DebugCommand}"/>
+
+        <TextBlock Grid.Row="0" Margin="0,20,0,0" FontSize="64" FontWeight="Bold" HorizontalAlignment="Center"
+                   Text="{Binding Title}" Foreground="LightGreen"/>
+
+        <Button Grid.Row="1" Margin="0,50,0,0" Style="{StaticResource MenuButtonStyle}"
+                Content="Start" Command="{Binding StartCommand}"/>
+        <Button Grid.Row="2" Margin="0,20,0,0" Style="{StaticResource MenuButtonStyle}"
+                Content="Exit" Command="{Binding ExitCommand}"/>
+
+        <Button Grid.Row="4" Margin="0,0,0,20" Style="{StaticResource MenuButtonStyle}"
+                Visibility="{Binding DebugVisibility}"
+                Content="DEBUG" Command="{Binding DebugCommand}"/>
     </Grid>
 </Page>
