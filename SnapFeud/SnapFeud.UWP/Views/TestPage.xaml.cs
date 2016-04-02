@@ -131,7 +131,7 @@ namespace SnapFeud.UWP.Views
             {
                 var fileSavePicker = new FileSavePicker();
                 fileSavePicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                fileSavePicker.FileTypeChoices.Add("JPG Image", new List<string>() {".jpg"});
+                fileSavePicker.FileTypeChoices.Add("JPG Image", new List<string>() { ".jpg" });
 
                 var filePicker = await fileSavePicker.PickSaveFileAsync();
                 if (filePicker != null)
@@ -143,22 +143,30 @@ namespace SnapFeud.UWP.Views
 
         private async void join_Click(object sender, RoutedEventArgs e)
         {
-            string userName = "Mats";
-            Uri geturi = new Uri($"http://localhost:5000/api/game/joingame/{userName}");
-            System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
-            System.Net.Http.HttpResponseMessage responseGet = await client.GetAsync(geturi);
-            string response = await responseGet.Content.ReadAsStringAsync();
-            var gameId = Guid.Parse(JToken.Parse(response).ToString());
+            try
+            {
 
-            geturi = new Uri("http://localhost:5000/api/game/getgamestate");
-            responseGet = await client.GetAsync(geturi);
-            response = await responseGet.Content.ReadAsStringAsync();
-            var result = JObject.Parse(response);
+                string userName = "Mats";
+                Uri geturi = new Uri($"http://localhost:5000/api/game/creategame/{userName}");
+                System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
+                System.Net.Http.HttpResponseMessage responseGet = await client.GetAsync(geturi);
+                string response = await responseGet.Content.ReadAsStringAsync();
+                var result = JObject.Parse(response);
+                var gameId = result["Id"];
 
-            var postUri = new Uri($"http://localhost:5000/api/game/submitanswer/{gameId}/{userName}");
-            var responsePost = await client.PostAsync(postUri, new ByteArrayContent(new byte[] { 1, 2 }));
-            response = await responsePost.Content.ReadAsStringAsync();
-            var correctAnswer = bool.Parse(JToken.Parse(response).ToString());
+                geturi = new Uri($"http://localhost:5000/api/game/getgame/{gameId}");
+                responseGet = await client.GetAsync(geturi);
+                response = await responseGet.Content.ReadAsStringAsync();
+                result = JObject.Parse(response);
+
+                var postUri = new Uri($"http://localhost:5000/api/game/submitanswer/{gameId}");
+                var responsePost = await client.PostAsync(postUri, new ByteArrayContent(new byte[] { 1, 2 }));
+                response = await responsePost.Content.ReadAsStringAsync();
+                result = JObject.Parse(response);
+            }
+            catch (Exception ex)
+            {
+            }
         }
     }
 }
