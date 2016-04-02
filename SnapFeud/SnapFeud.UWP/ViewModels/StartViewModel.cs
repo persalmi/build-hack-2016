@@ -37,6 +37,11 @@ namespace SnapFeud.UWP.ViewModels
         {
             var context = SimpleIoc.Default.GetInstance<SnapFeudContext>();
             var game = await _gameProxy.CreateGame(UserName);
+            if (game == null)
+            {
+                return;
+            }
+            context.UserName = UserName;
             context.CurrentGame = game;
             _navigationService.Navigate(typeof(GamePage));
         }

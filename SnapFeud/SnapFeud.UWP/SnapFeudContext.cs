@@ -12,6 +12,13 @@ namespace SnapFeud.UWP
 
         public string Title => "Snap Feud";
 
-        public Game CurrentGame { get; set; }
+        public string UserName { get; set; }
+
+        private Game _currentGame;
+        public Game CurrentGame
+        {
+            get { return _currentGame; }
+            set { Set(ref _currentGame, value); }
+        }
     }
 }

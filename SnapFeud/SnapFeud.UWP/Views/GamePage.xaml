@@ -11,7 +11,7 @@
 
     <Page.Resources>
         <SolidColorBrush x:Key="PageBackgroundColor">MediumBlue</SolidColorBrush>
-        <SolidColorBrush x:Key="PageForegroundColor">DeepSkyBlue</SolidColorBrush>
+        <SolidColorBrush x:Key="PageForegroundColor">White</SolidColorBrush>
 
         <Style x:Key="ControlStyle" TargetType="Control">
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -26,6 +26,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -33,12 +34,14 @@
                    Text="{Binding Context.Title}" FontSize="64" FontWeight="Bold" HorizontalAlignment="Center"/>
 
         <TextBlock Grid.Row="1" Margin="0,75,0,0" Foreground="{StaticResource PageForegroundColor}"
+                   Text="{Binding StatusText}" FontSize="32" HorizontalAlignment="Center"/>
+ 
+        <TextBlock Grid.Row="2" Margin="0,75,0,0" Foreground="{StaticResource PageForegroundColor}"
                    Text="{Binding Context.CurrentGame.CurrentChallenge.Description}" FontSize="32" HorizontalAlignment="Center"/>
 
-        <Button Grid.Row="2" Margin="0,25,0,0" Style="{StaticResource ControlStyle}"
+        <Button Grid.Row="3" Margin="0,25,0,0" Style="{StaticResource ControlStyle}"
                 Content="Take Photo" Command="{Binding PhotoCommand}"/>
         
-        <Image Grid.Row="3" Margin="0,0,0,25"
-               Source="{Binding ImageSource}"/>
+        <Image Grid.Row="4" Margin="0,0,0,25" Source="{Binding ImageSource}"/>
     </Grid>
 </Page>
