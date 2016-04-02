@@ -2,7 +2,7 @@
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Microsoft.ProjectOxford.Vision": "1.0.213",
-    "MvvmLight": "5.2.0"
+    "MvvmLight": "5.2.0",
     "Newtonsoft.Json": "8.0.3"
   },
   "frameworks": {
