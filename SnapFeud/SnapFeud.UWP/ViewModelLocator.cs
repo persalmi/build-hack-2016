@@ -11,9 +11,12 @@ namespace SnapFeud.UWP
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<INavigationService>(() => new NavigationService());
 
+            SimpleIoc.Default.Register<SnapFeudContext>();
             SimpleIoc.Default.Register<StartViewModel>();
             SimpleIoc.Default.Register<GameViewModel>();
         }
+
+        public SnapFeudContext Context => SimpleIoc.Default.GetInstance<SnapFeudContext>();
 
         public StartViewModel StartViewModel => SimpleIoc.Default.GetInstance<StartViewModel>();
 

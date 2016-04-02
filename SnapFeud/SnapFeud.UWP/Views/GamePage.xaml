@@ -7,10 +7,37 @@
     xmlns:vm="using:SnapFeud.UWP.ViewModels"
     mc:Ignorable="d"
     DataContext="{Binding GameViewModel, Source={StaticResource ViewModelLocator}}"
-    d:DataContext="{d:DesignInstance Type=vm:GameViewModel, IsDesignTimeCreatable=True}"
-    Background="Green">
+    d:DataContext="{d:DesignInstance Type=vm:GameViewModel, IsDesignTimeCreatable=True}">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <SolidColorBrush x:Key="PageBackgroundColor">MediumBlue</SolidColorBrush>
+        <SolidColorBrush x:Key="PageForegroundColor">DeepSkyBlue</SolidColorBrush>
 
+        <Style x:Key="ControlStyle" TargetType="Control">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="300"/>
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="Foreground" Value="{StaticResource PageForegroundColor}"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource PageBackgroundColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Margin="0,25,0,0" Foreground="{StaticResource PageForegroundColor}"
+                   Text="{Binding Context.Title}" FontSize="64" FontWeight="Bold" HorizontalAlignment="Center"/>
+
+        <TextBlock Grid.Row="1" Margin="0,75,0,0" Foreground="{StaticResource PageForegroundColor}"
+                   Text="Binding Context.CurrentGame.Challenge.Description" FontSize="32" HorizontalAlignment="Center"/>
+
+        <Button Grid.Row="2" Margin="0,25,0,0" Style="{StaticResource ControlStyle}"
+                Content="Take Photo" Command="{Binding PhotoCommand}"/>
+        
+        <Image Grid.Row="3" Margin="0,25,0,0"/>
     </Grid>
 </Page>

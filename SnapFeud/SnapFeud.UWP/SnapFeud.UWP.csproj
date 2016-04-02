@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SnapFeudContext.cs" />
     <Compile Include="GameServiceProxy.cs" />
     <Compile Include="NavigationService.cs" />
     <Compile Include="ViewModelLocator.cs" />
