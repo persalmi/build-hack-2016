@@ -7,6 +7,9 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SnapFeud.WebApi.Models;
+using Microsoft.Data.Entity;
+
 
 namespace SnapFeud.WebApi
 {
@@ -28,6 +31,11 @@ namespace SnapFeud.WebApi
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddEntityFramework()
+                .AddSqlServer()
+                .AddDbContext<SnapFeudContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,11 +44,19 @@ namespace SnapFeud.WebApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<SnapFeudContext>()
+                     .Database.Migrate();
+            }
+
             app.UseIISPlatformHandler();
 
             app.UseStaticFiles();
 
             app.UseMvc();
+
+            
         }
 
         // Entry point for the application.

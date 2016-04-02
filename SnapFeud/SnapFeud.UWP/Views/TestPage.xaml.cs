@@ -33,19 +33,26 @@ namespace SnapFeud.UWP.Views
 
         private async void button_Click(object sender, RoutedEventArgs e)
         {
-            var capture = new CameraCaptureUI();
-            capture.PhotoSettings.Format = CameraCaptureUIPhotoFormat.Png;
-            var photo = await capture.CaptureFileAsync(CameraCaptureUIMode.Photo);
-            
-            if (photo != null)
+            try
             {
-                var destinationFile = await StorageFile.GetFileFromPathAsync(Path.GetTempFileName());
-                await ResizeImage(photo, destinationFile);
+                var capture = new CameraCaptureUI();
+                capture.PhotoSettings.Format = CameraCaptureUIPhotoFormat.Png;
+                var photo = await capture.CaptureFileAsync(CameraCaptureUIMode.Photo);
 
-                await ShowImage(destinationFile);
-                lastPhoto = destinationFile;
+                if (photo != null)
+                {
+                    var destinationFile = await StorageFile.GetFileFromPathAsync(Path.GetTempFileName());
+                    await ResizeImage(photo, destinationFile);
 
-                await AnalyzeImage(destinationFile);
+                    await ShowImage(destinationFile);
+                    lastPhoto = destinationFile;
+
+                    await AnalyzeImage(destinationFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                resultText.Text = $"Failed: {ex.Message}";
             }
         }
 
