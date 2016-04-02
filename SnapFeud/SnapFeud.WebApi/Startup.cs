@@ -44,11 +44,19 @@ namespace SnapFeud.WebApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<SnapFeudContext>()
+                     .Database.Migrate();
+            }
+
             app.UseIISPlatformHandler();
 
             app.UseStaticFiles();
 
             app.UseMvc();
+
+            
         }
 
         // Entry point for the application.
