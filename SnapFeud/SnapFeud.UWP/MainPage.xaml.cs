@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -21,6 +22,8 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -144,6 +147,26 @@ namespace SnapFeud.UWP
                     await lastPhoto.CopyAndReplaceAsync(filePicker);
                 }
             }
+        }
+
+        private async void join_Click(object sender, RoutedEventArgs e)
+        {
+            string userName = "Mats";
+            Uri geturi = new Uri($"http://localhost:5000/api/game/joingame/{userName}");
+            System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
+            System.Net.Http.HttpResponseMessage responseGet = await client.GetAsync(geturi);
+            string response = await responseGet.Content.ReadAsStringAsync();
+            var gameId = Guid.Parse(JToken.Parse(response).ToString());
+
+            geturi = new Uri("http://localhost:5000/api/game/getgamestate");
+            responseGet = await client.GetAsync(geturi);
+            response = await responseGet.Content.ReadAsStringAsync();
+            var result = JObject.Parse(response);
+
+            var postUri = new Uri($"http://localhost:5000/api/game/submitanswer/{gameId}/{userName}");
+            var responsePost = await client.PostAsync(postUri, new ByteArrayContent(new byte[] {1, 2}));
+            response = await responsePost.Content.ReadAsStringAsync();
+            var correctAnswer = bool.Parse(JToken.Parse(response).ToString());
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 
 namespace SnapFeud.WebApi.Controllers
@@ -50,8 +51,11 @@ namespace SnapFeud.WebApi.Controllers
         }
 
         [HttpPost("{gameId}/{userName}")]
-        public bool SubmitAnswer([FromBody]byte[] photo, string userName, Guid gameId)
+        public async Task<bool> SubmitAnswer(string userName, Guid gameId)
         {
+            byte[] photo = new byte[Request.ContentLength.Value];
+            await Request.Body.ReadAsync(photo, 0, photo.Length);
+
             if (currentGameState == null || gameId != currentGameState.GameId || !users.ContainsKey(userName))
             {
                 return false;
