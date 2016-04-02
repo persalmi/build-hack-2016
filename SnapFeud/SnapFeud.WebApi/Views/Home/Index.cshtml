@@ -1,0 +1,28 @@
+﻿@using System.Collections.Generic
+@using System.Threading.Tasks
+@model System.Collections.Generic.IEnumerable<SnapFeud.WebApi.Models.Game>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+@ViewData["crap"]
+<h2>The Best SnapFeuders of Today</h2>
+
+<table class="table">
+    <tr>
+        <th>Score</th>
+        <th>Player</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Score)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Player.Name)
+            </td>
+        </tr>
+    }
+</table>

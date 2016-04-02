@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNet.Razor.TagHelpers;
 
 namespace SnapFeud.WebApi.Models
 {
