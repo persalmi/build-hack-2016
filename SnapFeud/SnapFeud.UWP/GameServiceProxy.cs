@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SnapFeud.WebApi.Controllers;
 using SnapFeud.WebApi.Models;
 
@@ -22,8 +24,13 @@ namespace SnapFeud.UWP
             Uri geturi = new Uri($"{baseUri}api/game/creategame/{userName}");
             HttpResponseMessage responseGet = await client.GetAsync(geturi);
             string response = await responseGet.Content.ReadAsStringAsync();
+            if (responseGet.IsSuccessStatusCode)
+            {
+                var id = Guid.Parse(JToken.Parse(response).ToString());
+                return await GetGame(id);
+            }
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Game>(response);
+            return null;
         }
 
         public async Task<Game> GetGame(Guid gameId)
