@@ -11,7 +11,7 @@ using SnapFeud.WebApi.Models;
 namespace SnapFeud.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class GameController : Controller, IGameController
+    public class GameController : Controller
     {
         private readonly SnapFeudContext snapFeudContext;
         private Random random = new Random();
@@ -22,7 +22,7 @@ namespace SnapFeud.WebApi.Controllers
         }
 
         [HttpGet("{userName}")]
-        public async Task<Game> CreateGame(string userName)
+        public async Task<Guid> CreateGame(string userName)
         {
             var player = await snapFeudContext.Players.FirstOrDefaultAsync(x => x.Name == userName);
             if (player == null)
@@ -30,7 +30,6 @@ namespace SnapFeud.WebApi.Controllers
                 player = new Player { Name = userName };
                 snapFeudContext.Players.Add(player);
             }
-
 
             var game = new Game
             {
@@ -45,7 +44,7 @@ namespace SnapFeud.WebApi.Controllers
 
             await snapFeudContext.SaveChangesAsync();
 
-            return game;
+            return game.Id;
         }
 
         [HttpGet("{gameId}")]
