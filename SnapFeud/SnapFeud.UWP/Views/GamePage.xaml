@@ -37,7 +37,8 @@
                    Text="{Binding StatusText}" FontSize="32" HorizontalAlignment="Center"/>
  
         <TextBlock Grid.Row="2" Margin="0,75,0,0" Foreground="{StaticResource PageForegroundColor}"
-                   Text="{Binding Context.CurrentGame.CurrentChallenge.Description}" FontSize="32" HorizontalAlignment="Center"/>
+                   Text="{Binding Context.CurrentGame.CurrentChallenge.Description}" FontSize="32"
+                   TextWrapping="Wrap" HorizontalAlignment="Center"/>
 
         <Button Grid.Row="3" Margin="0,25,0,0" Style="{StaticResource ControlStyle}"
                 Content="Take Photo" Command="{Binding PhotoCommand}"/>
