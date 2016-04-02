@@ -52,8 +52,6 @@ namespace SnapFeud.WebApi
 
             app.UseIISPlatformHandler();
 
-            app.UseStaticFiles();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
