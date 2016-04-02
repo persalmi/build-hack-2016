@@ -92,6 +92,18 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SnapFeud.WebApi\Controllers\IGameController.cs">
+      <Link>Models\IGameController.cs</Link>
+    </Compile>
+    <Compile Include="..\SnapFeud.WebApi\Models\Challenge.cs">
+      <Link>Models\Challenge.cs</Link>
+    </Compile>
+    <Compile Include="..\SnapFeud.WebApi\Models\Game.cs">
+      <Link>Models\Game.cs</Link>
+    </Compile>
+    <Compile Include="..\SnapFeud.WebApi\Models\Player.cs">
+      <Link>Models\Player.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>

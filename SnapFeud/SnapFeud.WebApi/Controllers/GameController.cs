@@ -7,7 +7,7 @@ using SnapFeud.WebApi.Models;
 namespace SnapFeud.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class GameController : Controller
+    public class GameController : Controller, IGameController
     {
         private readonly SnapFeudContext snapFeudContext;
 

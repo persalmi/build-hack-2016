@@ -145,24 +145,10 @@ namespace SnapFeud.UWP.Views
         {
             try
             {
-
-                string userName = "Mats";
-                Uri geturi = new Uri($"http://localhost:5000/api/game/creategame/{userName}");
-                System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
-                System.Net.Http.HttpResponseMessage responseGet = await client.GetAsync(geturi);
-                string response = await responseGet.Content.ReadAsStringAsync();
-                var result = JObject.Parse(response);
-                var gameId = result["Id"];
-
-                geturi = new Uri($"http://localhost:5000/api/game/getgame/{gameId}");
-                responseGet = await client.GetAsync(geturi);
-                response = await responseGet.Content.ReadAsStringAsync();
-                result = JObject.Parse(response);
-
-                var postUri = new Uri($"http://localhost:5000/api/game/submitanswer/{gameId}");
-                var responsePost = await client.PostAsync(postUri, new ByteArrayContent(new byte[] { 1, 2 }));
-                response = await responsePost.Content.ReadAsStringAsync();
-                result = JObject.Parse(response);
+                var proxy = new GameServiceProxy(new Uri("http://localhost:5000"));
+                var game = await proxy.CreateGame("Mats");
+                game = await proxy.GetGame(game.Id);
+                game = await proxy.SubmitAnswer(game.Id, new byte[] { 1, 2 });
             }
             catch (Exception ex)
             {
