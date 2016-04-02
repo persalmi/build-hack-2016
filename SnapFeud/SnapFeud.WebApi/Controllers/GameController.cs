@@ -14,6 +14,7 @@ namespace SnapFeud.WebApi.Controllers
     public class GameController : Controller, IGameController
     {
         private readonly SnapFeudContext snapFeudContext;
+        private Random random = new Random();
 
         public GameController(SnapFeudContext snapFeudContext)
         {
@@ -30,24 +31,15 @@ namespace SnapFeud.WebApi.Controllers
                 snapFeudContext.Players.Add(player);
             }
 
-            var random = new Random();
-            var challenges = await snapFeudContext.Challenges.ToListAsync();
-            if (challenges.Count == 0)
-            {
-                return null;
-            }
-
-            var nextChallenge = random.Next(0, challenges.Count);
-            var newChallenge = challenges[nextChallenge];
 
             var game = new Game
             {
-                ChallengeExpireTime = DateTime.UtcNow.AddMinutes(1),
                 Player = player,
                 Id = Guid.NewGuid(),
-                CurrentChallenge = newChallenge,
                 Score = 0
             };
+
+            await NextChallenge(game);
 
             snapFeudContext.Games.Add(game);
 
@@ -82,10 +74,21 @@ namespace SnapFeud.WebApi.Controllers
             {
                 var bestMatch = analysis.Tags.Where(x => expectedTags.Contains(x.Name)).Max(x => x.Confidence);
                 game.Score += (int)bestMatch * 1000;
+
+                await NextChallenge(game);
             }
 
             await snapFeudContext.SaveChangesAsync();
             return game;
+        }
+
+        private async Task NextChallenge(Game game)
+        {
+            var challenges = await snapFeudContext.Challenges.ToListAsync();
+            var nextChallenge = random.Next(0, challenges.Count);
+            var newChallenge = challenges.Count == 0 ? null : challenges[nextChallenge];
+            game.CurrentChallenge = newChallenge;
+            game.ChallengeExpireTime = DateTime.UtcNow.AddMinutes(1);
         }
 
         private async Task<AnalysisResult> AnalyzePhoto(byte[] photo)
