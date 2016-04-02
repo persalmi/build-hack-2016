@@ -36,7 +36,7 @@
                    Text="{Binding Context.Title}" FontSize="64" FontWeight="Bold" HorizontalAlignment="Center"/>
 
         <TextBox Grid.Row="1" Margin="0,75,0,0" Style="{StaticResource ControlStyle}"
-                 Text="{Binding UserName}"/>
+                 Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Button Grid.Row="2" Margin="0,25,0,0" Style="{StaticResource ControlStyle}"
                 Content="Start Game" Command="{Binding StartCommand}"/>
