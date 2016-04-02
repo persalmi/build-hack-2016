@@ -46,11 +46,19 @@ namespace SnapFeud.UWP
             return new Game { Player = new Player() };
         }
 
-        public async Task<Game> SubmitAnswer(Guid gameId, byte[] photo)
+        public async Task<Tuple<bool, Game>> SubmitAnswer(Guid gameId, byte[] photo)
         {
             var postUri = new Uri($"{baseUri}api/game/submitanswer/{gameId}");
-            await client.PostAsync(postUri, new ByteArrayContent(photo));
-            return await GetGame(gameId);
+            var responsePost = await client.PostAsync(postUri, new ByteArrayContent(photo));
+            if (responsePost.IsSuccessStatusCode)
+            {
+                var response = await responsePost.Content.ReadAsStringAsync();
+                var result = bool.Parse(JToken.Parse(response).ToString());
+
+                return new Tuple<bool, Game>(result, await GetGame(gameId));
+            }
+
+            return null;
         }
     }
 }
