@@ -98,7 +98,7 @@ namespace SnapFeud.UWP
 
                     AnalysisResult analysisResult =
                         await visionServiceClient.AnalyzeImageAsync(stream, visualFeatures);
-                    resultText.Text = string.Join("\n", analysisResult.Categories.Select(x => x.Name));
+                    resultText.Text = string.Join("\n", analysisResult.Tags.OrderByDescending(x => x.Confidence).Select(x => $"{x.Name} ({x.Confidence:F})"));
                 }
             }
             catch (Exception ex)

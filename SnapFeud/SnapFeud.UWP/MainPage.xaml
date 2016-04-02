@@ -8,8 +8,8 @@
     mc:Ignorable="d">
 
     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="button_Click"/>
+        <Button x:Name="button" Content="Take Photo" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="button_Click"/>
         <Image x:Name="imageControl" Width="200" Height="200" Tapped="imageControl_Tapped"/>
-        <TextBlock x:Name="resultText" Text="blaha" />
+        <TextBlock x:Name="resultText" Text="" />
     </StackPanel>
 </Page>
