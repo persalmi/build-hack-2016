@@ -8,27 +8,34 @@ namespace SnapFeud.WebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class GameController : Controller
     {
-        private readonly GameState currentGameState;
+        private static GameState currentGameState;
 
-        private readonly Dictionary<string, UserState> users = new Dictionary<string, UserState>();
+        private static readonly Dictionary<string, UserState> users = new Dictionary<string, UserState>();
 
-        private readonly string[] challenges = {"Laptop", "Phone"};
+        private static readonly string[] challenges = {"Laptop", "Phone"};
 
-        private readonly Random random = new Random();
+        private static readonly Random random = new Random();
 
         public GameController()
         {
-            currentGameState = new GameState {GameId = Guid.NewGuid()};
-            CreateNewChallenge(currentGameState);
+            if (currentGameState == null)
+            {
+                currentGameState = new GameState {GameId = Guid.NewGuid()};
+                CreateNewChallenge(currentGameState);
+            }
         }
 
         [HttpGet("{userName}")]
-        public void JoinGame(string userName)
+        public Guid JoinGame(string userName)
         {
             if (!users.ContainsKey(userName))
             {
                 users[userName] = new UserState {UserName = userName};
             }
+
+            users[userName].GameId = currentGameState.GameId;
+
+            return currentGameState.GameId;
         }
 
         [HttpGet]
