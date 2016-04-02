@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
+using Windows.System;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -10,10 +12,12 @@ namespace SnapFeud.UWP.ViewModels
     public class StartViewModel : ViewModelBase
     {
         private readonly INavigationService _navigationService;
+        private readonly GameServiceProxy _gameProxy;
 
         public StartViewModel(INavigationService navigationService, SnapFeudContext context)
         {
             _navigationService = navigationService;
+            _gameProxy = new GameServiceProxy(context.WebApiBaseUri);
             Context = context;
         }
 
@@ -32,18 +36,17 @@ namespace SnapFeud.UWP.ViewModels
         private async void Start()
         {
             var context = SimpleIoc.Default.GetInstance<SnapFeudContext>();
-            //var proxy = new GameProxy();
-            //var game = await proxy.CreateGame(UserName);
-            //context.CurrentGame = game;
+            var game = await _gameProxy.CreateGame(UserName);
+            context.CurrentGame = game;
             _navigationService.Navigate(typeof(GamePage));
         }
 
         private RelayCommand _leaderBoardCommand;
         public ICommand LeaderBoardCommand => _leaderBoardCommand ?? (_leaderBoardCommand = new RelayCommand(LeaderBoard));
 
-        private void LeaderBoard()
+        private async void LeaderBoard()
         {
-            // TODO
+            await Launcher.LaunchUriAsync(Context.LeaderBoardUri);
         }
 
         private RelayCommand _exitCommand;
