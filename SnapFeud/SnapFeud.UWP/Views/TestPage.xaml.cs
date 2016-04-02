@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Media.Capture;
@@ -145,10 +146,20 @@ namespace SnapFeud.UWP.Views
         {
             try
             {
-                var proxy = new GameServiceProxy(new Uri("http://localhost:5000"));
-                var game = await proxy.CreateGame("Mats");
-                game = await proxy.GetGame(game.Id);
-                game = await proxy.SubmitAnswer(game.Id, new byte[] { 1, 2 });
+                var picker = new FileOpenPicker();
+                picker.ViewMode = PickerViewMode.Thumbnail;
+                picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                picker.FileTypeFilter.Add(".png");
+                picker.FileTypeFilter.Add(".jpg");
+                picker.FileTypeFilter.Add(".jpeg"); var filePickerResult = await picker.PickSingleFileAsync();
+                if (filePickerResult != null)
+                {
+                    var bytes = (await FileIO.ReadBufferAsync(filePickerResult)).ToArray();
+                    var proxy = new GameServiceProxy(new Uri("http://localhost:5000"));
+                    var game = await proxy.CreateGame("Mats");
+                    game = await proxy.GetGame(game.Id);
+                    game = await proxy.SubmitAnswer(game.Id, bytes);
+                }
             }
             catch (Exception ex)
             {
