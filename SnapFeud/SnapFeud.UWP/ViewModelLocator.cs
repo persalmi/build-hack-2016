@@ -2,10 +2,14 @@
 using Microsoft.Practices.ServiceLocation;
 using SnapFeud.UWP.ViewModels;
 
-namespace SnapFeud.UWP {
-    public class ViewModelLocator {
-        public ViewModelLocator() {
+namespace SnapFeud.UWP
+{
+    public class ViewModelLocator
+    {
+        public ViewModelLocator()
+        {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+            SimpleIoc.Default.Register<INavigationService>(() => new NavigationService());
 
             SimpleIoc.Default.Register<StartViewModel>();
             SimpleIoc.Default.Register<GameViewModel>();
