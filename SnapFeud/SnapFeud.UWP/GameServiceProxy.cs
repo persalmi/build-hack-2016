@@ -30,23 +30,27 @@ namespace SnapFeud.UWP
                 return await GetGame(id);
             }
 
-            return null;
+            return new Game { Player = new Player() };
         }
 
         public async Task<Game> GetGame(Guid gameId)
         {
             var geturi = new Uri($"{baseUri}api/game/getgame/{gameId}");
             var responseGet = await client.GetAsync(geturi);
-            var response = await responseGet.Content.ReadAsStringAsync();
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Game>(response);
+            if (responseGet.IsSuccessStatusCode)
+            {
+                var response = await responseGet.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Game>(response);
+            }
+
+            return new Game { Player = new Player() };
         }
 
         public async Task<Game> SubmitAnswer(Guid gameId, byte[] photo)
         {
             var postUri = new Uri($"{baseUri}api/game/submitanswer/{gameId}");
-            var responsePost = await client.PostAsync(postUri, new ByteArrayContent(photo));
-            var response = await responsePost.Content.ReadAsStringAsync();
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Game>(response);
+            await client.PostAsync(postUri, new ByteArrayContent(photo));
+            return await GetGame(gameId);
         }
     }
 }
