@@ -75,7 +75,7 @@ namespace SnapFeud.UWP
 
                 using (var destinationStream = await destinationFile.OpenAsync(FileAccessMode.ReadWrite))
                 {
-                    BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, destinationStream);
+                    BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, destinationStream);
                     encoder.SetPixelData(BitmapPixelFormat.Rgba8, BitmapAlphaMode.Premultiplied, newWidth, newHeight, 96, 96, pixelData.DetachPixelData());
                     await encoder.FlushAsync();
                 }
@@ -87,7 +87,7 @@ namespace SnapFeud.UWP
             resultText.Text = "Analyzing...";
             try
             {
-                VisionServiceClient visionServiceClient = new VisionServiceClient();
+                VisionServiceClient visionServiceClient = new VisionServiceClient(File.ReadAllText("subscriptionkey.txt"));
                 using (var stream = await imageFile.OpenStreamForReadAsync())
                 {
                     VisualFeature[] visualFeatures = new VisualFeature[]
@@ -129,7 +129,7 @@ namespace SnapFeud.UWP
             {
                 var fileSavePicker = new FileSavePicker();
                 fileSavePicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                fileSavePicker.FileTypeChoices.Add("PNG Image", new List<string>() {".png"});
+                fileSavePicker.FileTypeChoices.Add("JPG Image", new List<string>() {".jpg"});
 
                 var filePicker = await fileSavePicker.PickSaveFileAsync();
                 if (filePicker != null)
