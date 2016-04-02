@@ -54,9 +54,14 @@ namespace SnapFeud.WebApi
 
             app.UseStaticFiles();
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
 
-            
+
         }
 
         // Entry point for the application.
