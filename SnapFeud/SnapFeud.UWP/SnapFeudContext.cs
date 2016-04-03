@@ -14,6 +14,8 @@ namespace SnapFeud.UWP
 
         public string UserName { get; set; }
 
+        public string ResultText { get; set; }
+
         private Game _currentGame;
         public Game CurrentGame
         {
