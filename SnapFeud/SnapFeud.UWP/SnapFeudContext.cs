@@ -6,10 +6,15 @@ namespace SnapFeud.UWP
 {
     public class SnapFeudContext : ViewModelBase
     {
+#if DEBUG
+        public readonly Uri WebApiBaseUri = new Uri("http://localhost:4699/");
+
+        public readonly Uri LeaderBoardUri = new Uri("http://localhost:4699");
+#else
         public readonly Uri WebApiBaseUri = new Uri("http://snapfeudwebapi.azurewebsites.net/");
 
         public readonly Uri LeaderBoardUri = new Uri("http://snapfeudwebapi.azurewebsites.net/");
-
+#endif
         public string Title => "Snap Feud";
 
         public string UserName { get; set; }

@@ -84,10 +84,6 @@ namespace SnapFeud.WebApi.Controllers
                 await snapFeudContext.SaveChangesAsync();
                 return isMatch ? "Correct answer" : "Wrong answer";
             }
-            catch (ClientException ex)
-            {
-                return ex.Error != null ? ex.Error.Message : ex.Message;
-            }
             catch (Exception ex)
             {
                 return ex.Message;

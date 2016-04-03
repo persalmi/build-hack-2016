@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="e47bcf04-1f10-486d-9881-93e08cf7f08a" Publisher="CN=matss" Version="1.0.0.0" />
+  <Identity Name="e47bcf04-1f10-486d-9881-93e08cf7f08a" Publisher="CN=Per" Version="1.0.2.0" />
   <mp:PhoneIdentity PhoneProductId="e47bcf04-1f10-486d-9881-93e08cf7f08a" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>SnapFeud.UWP</DisplayName>

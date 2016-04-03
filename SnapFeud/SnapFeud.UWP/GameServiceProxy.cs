@@ -53,9 +53,8 @@ namespace SnapFeud.UWP
             if (responsePost.IsSuccessStatusCode)
             {
                 var response = await responsePost.Content.ReadAsStringAsync();
-                var result = JToken.Parse(response).ToString();
 
-                return new Tuple<string, Game>(result, await GetGame(gameId));
+                return new Tuple<string, Game>(response, await GetGame(gameId));
             }
 
             return null;
