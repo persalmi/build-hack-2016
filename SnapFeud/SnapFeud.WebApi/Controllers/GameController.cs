@@ -86,7 +86,7 @@ namespace SnapFeud.WebApi.Controllers
             }
             catch (ClientException ex)
             {
-                return ex.Error.Message;
+                return ex.Error != null ? ex.Error.Message : ex.Message;
             }
             catch (Exception ex)
             {
