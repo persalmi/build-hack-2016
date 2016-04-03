@@ -54,6 +54,9 @@ namespace SnapFeud.UWP.ViewModels
                     await ResizeImage(photo, destinationFile);
                     await ShowImage(destinationFile);
                     var data = await GetImageData(destinationFile);
+                    Context.ResultText = " - Working...";
+                    RaisePropertyChanged(() => StatusText);
+
                     var newGame = await _gameProxy.SubmitAnswer(Context.CurrentGame.Id, data);
                     if (newGame != null)
                     {

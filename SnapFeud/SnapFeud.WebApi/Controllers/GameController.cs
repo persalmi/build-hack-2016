@@ -54,32 +54,38 @@ namespace SnapFeud.WebApi.Controllers
         }
 
         [HttpPost("{gameId}")]
-        public async Task<bool> SubmitAnswer(Guid gameId)
+        public async Task<string> SubmitAnswer(Guid gameId)
         {
             if (!Request.ContentLength.HasValue)
             {
-                return false;
+                return "No photo";
             }
 
-            byte[] photo = new byte[Request.ContentLength.Value];
-            await Request.Body.ReadAsync(photo, 0, photo.Length);
-
-            var analysis = await AnalyzePhoto(photo);
-            var game = await snapFeudContext.Games.Include(g => g.CurrentChallenge).FirstOrDefaultAsync(x => x.Id == gameId);
-
-            var expectedTags = game.CurrentChallenge.Tag.Split(',');
-            var isMatch = expectedTags.All(x => analysis.Tags.Any(y => y.Name == x));
-            //var isMatch = true;
-            if (isMatch)
+            try
             {
-                //var bestMatch = analysis.Tags.Where(x => expectedTags.Contains(x.Name)).Max(x => x.Confidence);
-                game.Score += 500; //(int)bestMatch * 1000;
+                byte[] photo = new byte[Request.ContentLength.Value];
+                await Request.Body.ReadAsync(photo, 0, photo.Length);
 
-                await NextChallenge(game);
+                var analysis = await AnalyzePhoto(photo);
+                var game = await snapFeudContext.Games.Include(g => g.CurrentChallenge).FirstOrDefaultAsync(x => x.Id == gameId);
+
+                var expectedTags = game.CurrentChallenge.Tag.Split(',');
+                var isMatch = expectedTags.All(x => analysis.Tags.Any(y => y.Name == x));
+                if (isMatch)
+                {
+                    //var bestMatch = analysis.Tags.Where(x => expectedTags.Contains(x.Name)).Max(x => x.Confidence);
+                    game.Score += 500; //(int)bestMatch * 1000;
+
+                    await NextChallenge(game);
+                }
+
+                await snapFeudContext.SaveChangesAsync();
+                return isMatch ? "Correct answer" : "Wrong answer";
             }
-
-            await snapFeudContext.SaveChangesAsync();
-            return isMatch;
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
         private async Task NextChallenge(Game game)
@@ -93,7 +99,7 @@ namespace SnapFeud.WebApi.Controllers
 
         private async Task<AnalysisResult> AnalyzePhoto(byte[] photo)
         {
-            
+
             VisionServiceClient visionServiceClient = new VisionServiceClient("");
             using (var stream = new MemoryStream(photo))
             {
