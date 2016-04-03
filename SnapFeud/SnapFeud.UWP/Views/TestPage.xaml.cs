@@ -90,7 +90,7 @@ namespace SnapFeud.UWP.Views
             resultText.Text = "Analyzing...";
             try
             {
-                VisionServiceClient visionServiceClient = new VisionServiceClient(File.ReadAllText("subscriptionkey.txt"));
+                VisionServiceClient visionServiceClient = new VisionServiceClient("");
                 using (var stream = await imageFile.OpenStreamForReadAsync())
                 {
                     VisualFeature[] visualFeatures = new VisualFeature[]
