@@ -54,11 +54,11 @@ namespace SnapFeud.WebApi.Controllers
         }
 
         [HttpPost("{gameId}")]
-        public async Task<Game> SubmitAnswer(Guid gameId)
+        public async Task<bool> SubmitAnswer(Guid gameId)
         {
             if (!Request.ContentLength.HasValue)
             {
-                return null;
+                return false;
             }
 
             byte[] photo = new byte[Request.ContentLength.Value];
@@ -69,16 +69,17 @@ namespace SnapFeud.WebApi.Controllers
 
             var expectedTags = game.CurrentChallenge.Tag.Split(',');
             var isMatch = expectedTags.All(x => analysis.Tags.Any(y => y.Name == x));
+            //var isMatch = true;
             if (isMatch)
             {
-                var bestMatch = analysis.Tags.Where(x => expectedTags.Contains(x.Name)).Max(x => x.Confidence);
-                game.Score += (int)bestMatch * 1000;
+                //var bestMatch = analysis.Tags.Where(x => expectedTags.Contains(x.Name)).Max(x => x.Confidence);
+                game.Score += 500; //(int)bestMatch * 1000;
 
                 await NextChallenge(game);
             }
 
             await snapFeudContext.SaveChangesAsync();
-            return game;
+            return isMatch;
         }
 
         private async Task NextChallenge(Game game)
@@ -93,7 +94,7 @@ namespace SnapFeud.WebApi.Controllers
         private async Task<AnalysisResult> AnalyzePhoto(byte[] photo)
         {
             
-            VisionServiceClient visionServiceClient = new VisionServiceClient(System.IO.File.ReadAllText("wwwroot/subscriptionkey.txt"));
+            VisionServiceClient visionServiceClient = new VisionServiceClient("");
             using (var stream = new MemoryStream(photo))
             {
                 VisualFeature[] visualFeatures = new VisualFeature[]
