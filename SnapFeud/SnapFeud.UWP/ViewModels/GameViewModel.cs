@@ -61,7 +61,7 @@ namespace SnapFeud.UWP.ViewModels
                     if (newGame != null)
                     {
                         Context.CurrentGame = newGame.Item2;
-                        Context.ResultText = newGame.Item1 ? string.Empty : " - Wrong answer!";
+                        Context.ResultText = newGame.Item1;
                     }
                     else
                     {

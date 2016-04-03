@@ -67,7 +67,9 @@ namespace SnapFeud.WebApi.Controllers
                 await Request.Body.ReadAsync(photo, 0, photo.Length);
 
                 var analysis = await AnalyzePhoto(photo);
-                var game = await snapFeudContext.Games.Include(g => g.CurrentChallenge).FirstOrDefaultAsync(x => x.Id == gameId);
+                var game =
+                    await
+                        snapFeudContext.Games.Include(g => g.CurrentChallenge).FirstOrDefaultAsync(x => x.Id == gameId);
 
                 var expectedTags = game.CurrentChallenge.Tag.Split(',');
                 var isMatch = expectedTags.All(x => analysis.Tags.Any(y => y.Name == x));
@@ -81,6 +83,10 @@ namespace SnapFeud.WebApi.Controllers
 
                 await snapFeudContext.SaveChangesAsync();
                 return isMatch ? "Correct answer" : "Wrong answer";
+            }
+            catch (ClientException ex)
+            {
+                return ex.Error.Message;
             }
             catch (Exception ex)
             {
