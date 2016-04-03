@@ -158,7 +158,7 @@ namespace SnapFeud.UWP.Views
                     var proxy = new GameServiceProxy(new Uri("http://localhost:5000"));
                     var game = await proxy.CreateGame("Mats");
                     game = await proxy.GetGame(game.Id);
-                    game = await proxy.SubmitAnswer(game.Id, bytes);
+                    game = (await proxy.SubmitAnswer(game.Id, bytes)).Item2;
                 }
             }
             catch (Exception ex)

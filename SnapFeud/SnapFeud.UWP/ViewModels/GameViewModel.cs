@@ -38,7 +38,7 @@ namespace SnapFeud.UWP.ViewModels
             set { Set(ref _imageSource, value); }
         }
 
-        public string StatusText => string.Format($"{Context.UserName} - Score: {Context.CurrentGame.Score}");
+        public string StatusText => string.Format($"{Context.UserName} - Score: {Context.CurrentGame.Score}{Context.ResultText}");
 
         private async void TakePhoto()
         {
@@ -54,7 +54,17 @@ namespace SnapFeud.UWP.ViewModels
                     await ResizeImage(photo, destinationFile);
                     await ShowImage(destinationFile);
                     var data = await GetImageData(destinationFile);
-                    Context.CurrentGame = await _gameProxy.SubmitAnswer(Context.CurrentGame.Id, data);
+                    var newGame = await _gameProxy.SubmitAnswer(Context.CurrentGame.Id, data);
+                    if (newGame != null)
+                    {
+                        Context.CurrentGame = newGame.Item2;
+                        Context.ResultText = newGame.Item1 ? string.Empty : " - Wrong answer!";
+                    }
+                    else
+                    {
+                        Context.ResultText = " - Error";
+                    }
+
                     RaisePropertyChanged(() => StatusText);
                 }
             }
